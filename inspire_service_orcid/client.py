@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from orcid import MemberAPI
 from requests.exceptions import HTTPError
-from time_execution import time_execution
 
 from inspire_service_orcid.conf import settings
 
@@ -24,7 +23,6 @@ class OrcidClient(object):
             timeout=settings.REQUEST_TIMEOUT,
             do_store_raw_response=True)
 
-    @time_execution
     def get_all_works_summary(self):
         """
         Get a summary of all works for the given orcid.
@@ -41,7 +39,6 @@ class OrcidClient(object):
             response = exc.response
         return models.GetAllWorksSummaryResponse(self.memberapi, response)
 
-    @time_execution
     def get_work_details(self, putcode):
         """
         Get a summary of a work for the given orcid.
@@ -64,7 +61,6 @@ class OrcidClient(object):
             response = exc.response
         return models.GetWorkDetailsResponse(self.memberapi, response)
 
-    @time_execution
     def _get_bulk_works_details(self, putcodes):
         """
         Get a summary of the given works for the given orcid.
@@ -124,7 +120,6 @@ class OrcidClient(object):
         for putcodes_chunk in utils.chunked_sequence_iter(putcodes, MAX_PUTCODES_PER_WORKS_DETAILS_REQUEST):
             yield self._get_bulk_works_details(putcodes_chunk)
 
-    @time_execution
     def post_new_work(self, xml_element):
         """
         Create a new work for the given orcid and with the given xml data.
@@ -147,7 +142,6 @@ class OrcidClient(object):
             response = exc.response
         return models.PostNewWorkResponse(self.memberapi, response)
 
-    @time_execution
     def put_updated_work(self, xml_element, putcode):
         """
         Update en existent work.
@@ -175,7 +169,6 @@ class OrcidClient(object):
             response = exc.response
         return models.PutUpdatedWorkResponse(self.memberapi, response)
 
-    @time_execution
     def delete_work(self, putcode):
         """
         Delete en existent work.
